@@ -81,6 +81,7 @@ async function register(req: Request, res: Response) {
     const hashedPassword = await bcrypt.hash(password, 12);
     const newUser = new UserModel({
       email,
+      username: "",
       password: hashedPassword,
       role: "user",
       dateCreated: new Date(),
