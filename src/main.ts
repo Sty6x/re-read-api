@@ -52,12 +52,14 @@ app.use(
   ) => {
     // improve error handling
     console.log("Error handler");
-    console.error(err);
-    if (err.name === "JsonWebTokenError")
+    if (err.name === "JsonWebTokenError") {
+      console.error("JWT error");
       res.json({
         sessionExpired: true,
         message: "Session Expired.",
       });
+      return;
+    }
     res.json({ ErrorMessage: err });
   },
 );

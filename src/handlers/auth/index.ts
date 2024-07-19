@@ -7,6 +7,12 @@ import UserModel from "../../models/UserModel";
 const bcrypt = require("bcrypt");
 const secret = process.env.SECRET_KEY as string;
 
+declare module "express" {
+  export interface Request {
+    user?: any; // Add your custom property here
+  }
+}
+
 async function login(req: Request, res: Response, next: NextFunction) {
   console.log(req.body);
   const { valid, message } = isValid(req);
@@ -23,8 +29,6 @@ async function login(req: Request, res: Response, next: NextFunction) {
       email,
       password,
     }: { email: string; password: string; UserID: string } = matchedData(req);
-    console.log(req.cookies);
-    jwt.verify(req.cookies["token"], secret);
     let user = null;
     try {
       user = await UserModel.findOne({ email });
@@ -37,6 +41,14 @@ async function login(req: Request, res: Response, next: NextFunction) {
     const isPassSame = await bcrypt.compare(password, user.password);
     if (!isPassSame) {
       throw new Error("Password incorrect.");
+    }
+    try {
+      await jwt.verify(req.cookies["token"], secret);
+    } catch (err: any) {
+      console.log("Cookie has expired creating a new session.");
+      req.user = user;
+      next();
+      return;
     }
     res.json({
       message: "Login success",
@@ -83,6 +95,7 @@ async function register(req: Request, res: Response) {
       sameSite: "none",
       secure: true,
       httpOnly: true,
+      maxAge: 5000,
     });
     res.json({
       message: "Register success.",
@@ -93,6 +106,23 @@ async function register(req: Request, res: Response) {
     console.error(`Log Error: ${err.message}`);
     res.status(400).send({ ErrorMessage: err.message });
   }
+}
+
+async function renewToken(req: Request, res: Response) {
+  const jwtToken = jwt.sign(
+    { email: req.user.email, password: req.user.password, role: "user" },
+    secret,
+  );
+  res.cookie("token", jwtToken, {
+    sameSite: "none",
+    secure: true,
+    httpOnly: true,
+    maxAge: 5000,
+  });
+  res.json({
+    message: "New session",
+    redirect: { canNavigate: true, userData: req.user, route: "/app" },
+  });
 }
 
 export default { login, register };
