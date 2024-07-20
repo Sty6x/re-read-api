@@ -42,7 +42,7 @@ app.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.status(200).send("Hello Re:read API");
 });
 app.use("/auth", authRoutes);
-app.use("/app", authorizeUser, apiv1);
+app.use("/api/v1", authorizeUser, apiv1);
 //app.use("/app", apiv1);
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   // improve error handling
