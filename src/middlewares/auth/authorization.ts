@@ -8,6 +8,7 @@ async function authorizeUser(req: Request, res: Response, next: NextFunction) {
   const clientToken = req.cookies["token"];
   try {
     const payload = jwt.verify(clientToken, secret);
+    next();
   } catch (err: any) {
     next(err);
   }

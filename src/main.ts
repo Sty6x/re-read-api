@@ -50,7 +50,7 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.log("Error handler: " + err.message);
   if (err.name === "JsonWebTokenError") {
     res.json({
-      sessionExpired: true,
+      tokenInvalid: true,
       message: "Invalid Token",
       redirect: { canNavigate: true, route: "/auth/login" },
     });
