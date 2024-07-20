@@ -42,20 +42,25 @@ app.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.status(200).send("Hello Re:read API");
 });
 app.use("/auth", authRoutes);
-//app.use("/app", authorizeUser, apiv1);
-app.use("/app", apiv1);
+app.use("/app", authorizeUser, apiv1);
+//app.use("/app", apiv1);
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   // improve error handling
   console.log("Error name: " + err.name);
   console.log("Error handler: " + err.message);
   if (err.name === "JsonWebTokenError") {
-    console.error("JWT error");
     res.json({
       sessionExpired: true,
-      message: "Session Expired.",
+      message: "Invalid Token",
+      redirect: { canNavigate: true, route: "/auth/login" },
+    });
+  } else if (err.name === "TokenExpiredError") {
+    res.json({
+      sessionExpired: true,
+      message: "Session Expired",
+      redirect: { canNavigate: true, route: "/auth/login" },
     });
   } else if (err.name === "UserUpdateError") {
-    console.error("User update error");
     res.json({
       ErrorMessage: err.message,
     });

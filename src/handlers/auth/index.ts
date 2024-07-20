@@ -42,14 +42,18 @@ async function login(req: Request, res: Response, next: NextFunction) {
     if (!isPassSame) {
       throw new Error("Password incorrect.");
     }
+
+    // Handle absent token when user credentials match up.
     try {
-      await jwt.verify(req.cookies["token"], secret);
+      if (req.cookies["token"] === undefined)
+        throw new Error("Cookie has expired, creating a new session");
     } catch (err: any) {
-      console.log("Cookie has expired creating a new session.");
       req.user = user;
       next();
       return;
     }
+    // should throw an invalid token error if token has been tampered or whatever
+    await jwt.verify(req.cookies["token"], secret);
     res.json({
       message: "Login success",
       userData: user,
@@ -107,23 +111,6 @@ async function register(req: Request, res: Response) {
     console.error(`Log Error: ${err.message}`);
     res.status(400).send({ ErrorMessage: err.message });
   }
-}
-
-async function renewToken(req: Request, res: Response) {
-  const jwtToken = jwt.sign(
-    { email: req.user.email, password: req.user.password, role: "user" },
-    secret,
-  );
-  res.cookie("token", jwtToken, {
-    sameSite: "none",
-    secure: true,
-    httpOnly: true,
-    maxAge: 5000,
-  });
-  res.json({
-    message: "New session",
-    redirect: { canNavigate: true, userData: req.user, route: "/app" },
-  });
 }
 
 export default { login, register };

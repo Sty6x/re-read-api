@@ -4,8 +4,6 @@ import UserModel from "../../models/UserModel";
 async function update(req: Request, res: Response, next: NextFunction) {
   const userID = req.UserId;
   const updatedFields = req.query;
-  const changes: { email: string; password: string; username: string } =
-    req.body;
   console.log(updatedFields);
   try {
     const updateUser = await UserModel.findByIdAndUpdate(userID, updatedFields);
