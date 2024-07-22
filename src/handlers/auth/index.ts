@@ -19,7 +19,8 @@ async function login(req: Request, res: Response, next: NextFunction) {
   if (!valid) {
     const m = message.email || message.password;
     console.error(`Log Error: ${message}`);
-    return res.status(400).send({
+    return res.send({
+      validityError: true,
       message: m.msg,
       redirect: { canNavigate: false, route: "" },
     });
@@ -62,6 +63,7 @@ async function login(req: Request, res: Response, next: NextFunction) {
   } catch (err: any) {
     console.error("Log Error: " + err.message);
     res.json({
+      validityError: true,
       message: err.message,
       redirect: { canNavigate: false, route: "" },
     });
@@ -73,7 +75,8 @@ async function register(req: Request, res: Response) {
   console.error(message);
   if (!valid) {
     const m = message.email || message.password;
-    return res.status(400).send({
+    return res.send({
+      validityError: true,
       message: m.msg,
       redirect: { canNavigate: false, route: "" },
     });

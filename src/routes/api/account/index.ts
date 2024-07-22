@@ -12,6 +12,6 @@ router.use("/", (req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-router.post("/change", validator.userAccount, userHandlers.update);
+router.post("/change", userHandlers.update);
 
 export default router;
