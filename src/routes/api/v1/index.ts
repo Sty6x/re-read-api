@@ -12,26 +12,21 @@ declare module "express" {
     UserId?: string; // Add your custom property here
   }
 }
-router.use(
-  "/:UserId",
-  (req: Request, res: Response, next: NextFunction) => {
-    req.UserId = req.params.UserId;
-    next();
-  },
-  usernameCheck,
-);
+router.use("/:UserId", (req: Request, res: Response, next: NextFunction) => {
+  req.UserId = req.params.UserId;
+  next();
+});
 
-router.get("/", (req: Request, res: Response) => {
+router.get("/", usernameCheck, (req: Request, res: Response) => {
   console.log("called");
   res.json({ message: "Welcome to API" });
 });
 
-router.get("/:UserId/all", (req: Request, res: Response) => {
+router.get("/:UserId/all", usernameCheck, (req: Request, res: Response) => {
   console.log("Fetch everything from user");
   res.json({ message: "Get all books and notes" });
 });
 
-router.use("/:UserId/settings/change", userHandlers.update);
 router.use("/:UserId", noteRoutes);
 router.use("/:UserId", booksRoutes);
 

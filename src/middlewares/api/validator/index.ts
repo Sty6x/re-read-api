@@ -26,6 +26,20 @@ function books() {
   );
 }
 
+function userAccount() {
+  return checkSchema(
+    {
+      username: {
+        escape: true,
+        isString: true,
+        notEmpty: true,
+        errorMessage: "Invalid input data type.",
+      },
+    },
+    ["query"],
+  );
+}
+
 function notes() {
   return checkSchema(
     {
@@ -52,4 +66,4 @@ function notes() {
   );
 }
 
-export default { books, notes };
+export default { books, notes, userAccount };

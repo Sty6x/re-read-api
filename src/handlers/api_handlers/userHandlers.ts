@@ -2,13 +2,27 @@ import { Request, Response, NextFunction } from "express";
 import UserModel from "../../models/UserModel";
 
 async function update(req: Request, res: Response, next: NextFunction) {
-  const userID = req.UserId;
-  const updatedFields = req.query;
-  console.log(updatedFields);
+  const userID = req.query.userID;
+  const { username, email, password } = req.query;
+  console.log({ username, userID });
   try {
-    const updateUser = await UserModel.findByIdAndUpdate(userID, updatedFields);
+    const updateUser = await UserModel.findByIdAndUpdate(
+      userID,
+      {
+        $set: {
+          username,
+          email,
+        },
+      },
+      { new: true },
+    );
+
+    console.log(updateUser);
+    if (updateUser === null) throw new Error("User null");
+    updateUser.save();
     res.json({
-      message: `Successfully updated your ${Object.keys(updatedFields)[0]}`,
+      message: `Successfully updated your ${Object.keys(req.query)[0]}`,
+      redirect: { canNavigate: true, route: "/app" },
     });
   } catch (err) {
     next({

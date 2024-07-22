@@ -10,6 +10,7 @@ import mongoose from "mongoose";
 import "dotenv/config";
 import apiv1 from "./routes/api/v1";
 import authorizeUser from "./middlewares/auth/authorization";
+import account from "./routes/api/account";
 import fs from "fs";
 const cookieParser = require("cookie-parser");
 const https = require("https");
@@ -42,6 +43,7 @@ app.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.status(200).send("Hello Re:read API");
 });
 app.use("/auth", authRoutes);
+app.use("/account", account);
 app.use("/api/v1", authorizeUser, apiv1);
 //app.use("/app", apiv1);
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
