@@ -100,12 +100,12 @@ async function register(req: Request, res: Response) {
       sameSite: "none",
       secure: true,
       httpOnly: true,
-      maxAge: 5000,
+      //maxAge: 5000,
     });
     res.json({
       message: "Register success.",
       userData: newUser,
-      redirect: { canNavigate: true, route: "/auth/register/username" },
+      redirect: { canNavigate: true, route: "/auth/username" },
     });
   } catch (err: any) {
     console.error(`Log Error: ${err.message}`);

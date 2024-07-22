@@ -11,7 +11,7 @@ export default async (req: Request, res: Response) => {
     sameSite: "none",
     secure: true,
     httpOnly: true,
-    maxAge: 5000,
+    //maxAge: 5000,
   });
   res.json({
     message: "New session",

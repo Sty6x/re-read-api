@@ -60,6 +60,12 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
       message: "Session Expired",
       redirect: { canNavigate: true, route: "/auth/login" },
     });
+  } else if (err.name === "UserQueryError") {
+    res.json({
+      userQueryError: true,
+      message: err.message,
+      redirect: { canNavigate: true, route: "/auth/username" },
+    });
   } else if (err.name === "UserUpdateError") {
     res.json({
       ErrorMessage: err.message,
