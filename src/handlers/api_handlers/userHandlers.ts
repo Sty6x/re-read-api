@@ -1,7 +1,16 @@
 import { Request, Response, NextFunction } from "express";
 import UserModel from "../../models/UserModel";
+import { matchedData } from "express-validator";
+import { isValid } from "../../utils/validationUtils";
 
 async function update(req: Request, res: Response, next: NextFunction) {
+  const { valid, message } = isValid(req);
+  if (!valid) {
+    console.log(message);
+    return res.status(404).json({ ErrorMessage: message });
+  }
+  const dataQueryString = matchedData(req);
+  console.log(dataQueryString);
   const userID = req.query.userID;
   const { username, email, password } = req.query;
   console.log({ username, userID });

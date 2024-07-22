@@ -33,7 +33,7 @@ function userAccount() {
         escape: true,
         isString: true,
         notEmpty: true,
-        errorMessage: "Invalid input data type.",
+        errorMessage: "Invalid username input.",
       },
     },
     ["query"],
