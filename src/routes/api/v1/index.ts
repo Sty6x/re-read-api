@@ -4,7 +4,7 @@ import noteRoutes from "./noteRoutes";
 import apiValidator from "../../../middlewares/api/validator";
 import checkExistingBook from "../../../middlewares/api/checkExistingBook";
 import userHandlers from "../../../handlers/api_handlers/userHandlers";
-import usernameCheck from "../../../middlewares/auth/usernameCheck";
+import userCheck from "../../../middlewares/auth/userCheck";
 const router = express.Router();
 
 declare module "express" {
@@ -17,12 +17,12 @@ router.use("/:UserId", (req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-router.get("/", usernameCheck, (req: Request, res: Response) => {
+router.get("/", userCheck, (req: Request, res: Response) => {
   console.log("called");
   res.json({ message: "Welcome to API" });
 });
 
-router.get("/:UserId/all", usernameCheck, (req: Request, res: Response) => {
+router.get("/:UserId/all", userCheck, (req: Request, res: Response) => {
   console.log("Fetch everything from user");
   res.json({ message: "Get all books and notes" });
 });

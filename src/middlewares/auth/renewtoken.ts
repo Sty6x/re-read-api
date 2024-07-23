@@ -16,6 +16,6 @@ export default async (req: Request, res: Response) => {
   res.json({
     message: "New session",
     userData: req.user,
-    redirect: { canNavigate: true, route: "/app" },
+    redirect: { canNavigate: true, route: "/app/home" },
   });
 };

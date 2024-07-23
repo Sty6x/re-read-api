@@ -31,7 +31,7 @@ async function update(req: Request, res: Response, next: NextFunction) {
     updateUser.save();
     res.json({
       message: `Successfully updated your ${Object.keys(req.query)[0]}`,
-      redirect: { canNavigate: true, route: "/app" },
+      redirect: { canNavigate: true, route: "/app/home" },
     });
   } catch (err) {
     next({

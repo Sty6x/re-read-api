@@ -31,7 +31,12 @@ startMongooseServer(uri)
   .catch((err) => console.log(err));
 
 app.use(cookieParser());
-app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
+app.use(
+  cors({
+    credentials: true,
+    origin: ["http://192.168.1.71:5173", "http://localhost:5173"],
+  }),
+);
 app.use(express.json());
 app.use(express.urlencoded());
 

@@ -58,7 +58,7 @@ async function login(req: Request, res: Response, next: NextFunction) {
     res.json({
       message: "Login success",
       userData: user,
-      redirect: { canNavigate: true, route: "/app" },
+      redirect: { canNavigate: true, route: "/app/home" },
     });
   } catch (err: any) {
     console.error("Log Error: " + err.message);
